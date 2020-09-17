@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>语法糖--模板字符串</title>
+</head>
+
+<body>
+    <div id="root">
+        <div>
+            <button onclick="testString()">测试模板字符串</button>
+            <button onclick="testHtml()">测试模板HTML字符串</button>
+            <button onclick="testTag()">测试标记模板</button>
+        </div>
+        <div id="string" style="background-color: cadetblue;">
+            <label>测试模板字符串</label>
+        </div>
+        <div id="html" style="background-color: aqua;">
+            <label>这是id为html的div</label>
+        </div>
+        <div id="tag" style="background-color:darkseagreen;">
+            <label>测试标记模板</label>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function testHtml() {
+            let label = "测试模板HTML字符串";
+            let template = `
+                <div id="temp">
+                    <label>${label}</label>
+                </div>
+            `;
+            let rootDom = document.getElementById("html");
+            rootDom.outerHTML = template; // 直接替换html
+            // rootDom.innerHTML = template; // 在html里嵌入
+        }
+
+        function testString() {
+            let content = "字符串内容";
+            let string = `测试带变量换行字符串
+            这是${content}`; // 变成p标签的内容后换行不起作用
+            console.log(string); // 控制台输出会换行
+            let stringDom = document.getElementById("string");
+            let pDom = document.createElement("p");
+            let textDom = document.createTextNode(string);
+            pDom.appendChild(textDom);
+            stringDom.appendChild(pDom);
+        }
+
+        function testTag() {
+            let name = 'Mike';
+            let age = 18;
+            function myTag(strings, nameExp, ageExp) {
+                console.log(strings, nameExp, ageExp);
+                let ageStr = ' a child';
+                if (ageExp >19) {
+                    ageStr = 'not' + ageStr;
+                }
+                return strings[0] + nameExp + strings[1] + ageStr
+            }
+            let content = myTag`this is ${name},\n he is ${age}`;
+            console.log(content);
+            console.log(String.raw`this is ${name},\n he is ${age}`);
+            let tagDom = document.getElementById("tag");
+            let textDom = document.createTextNode(content);
+            tagDom.appendChild(textDom);
+        }
+
+    </script>
+</body>
+
+</html>
